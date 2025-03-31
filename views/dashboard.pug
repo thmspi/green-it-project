@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1 Dashboard
+  a(href='/logout') Logout
+  h2 Your To-Do Lists
+  ul
+    each list in lists
+      li
+        a(href=`/list/${list.id}`)= list.name
+        if list.image
+          img(src=`/uploads/${list.image}`, alt='List Image', width='50')
+  h2 Create New List
+  form(method='POST', action='/dashboard/create', enctype='multipart/form-data')
+    label(for='name') List Name:
+    input(type='text', name='name', required)
+    br
+    label(for='image') Optional Image:
+    input(type='file', name='image')
+    br
+    button(type='submit') Create

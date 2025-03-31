@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1= list.name
+  if list.image
+    img(src=`/uploads/${list.image}`, alt='List Image', width='100')
+  a(href='/dashboard') Back to Dashboard
+  h2 Items
+  ul
+    each item in items
+      li
+        form(method='POST', action=`/list/${list.id}/item/${item.id}/toggle`, style='display:inline')
+          input(type='checkbox', onchange='this.form.submit()', checked=item.done)
+        span(style=item.done ? 'text-decoration: line-through;' : '')= item.text
+        form(method='POST', action=`/list/${list.id}/item/${item.id}/edit`, style='display:inline')
+          input(type='text', name='text', placeholder='Edit item')
+          button(type='submit') Edit
+        form(method='POST', action=`/list/${list.id}/item/${item.id}/delete`, style='display:inline')
+          button(type='submit') Delete
+  h2 Add New Item
+  form(method='POST', action=`/list/${list.id}/item`)
+    input(type='text', name='text', required, placeholder='New item text')
+    button(type='submit') Add
