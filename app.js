@@ -3,6 +3,8 @@ const session = require('express-session');
 const path = require('path');
 
 const app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
@@ -30,6 +32,8 @@ const listRoutes = require('./routes/list');
 app.use('/', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/list', listRoutes);
+
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

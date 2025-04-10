@@ -1,16 +1,28 @@
-extends layout
+doctype html
+html
+  head
+    title Login
+    meta(name="viewport", content="width=device-width, initial-scale=1.0 minimum-scale=1.0")
+    link(rel="stylesheet", href="/stylesheets/identification.css")
+    link(rel='preconnect' href='https://fonts.googleapis.com')
+    link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+    link(href='https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap' rel='stylesheet')
 
-block content
-  h1 Register
-  if error
-    p.error= error
-  form(method='POST', action='/register')
-    label(for='username') Username:
-    input(type='text', name='username', required)
-    br
-    label(for='password') Password:
-    input(type='password', name='password', required)
-    br
-    button(type='submit') Register
-  p
-    a(href='/') Login
+  body
+    #container
+      h1#title Welcome !
+      if error
+        p.error= error
+      form(method='POST', action='/register')
+        #inputcontainer
+          .row
+            label(for='username') Username:
+            input(type='text', name='username', required)
+            br
+          .row
+            label(for='password') Password:
+            input(type='password', name='password', required)
+            br
+        button(type='submit')#submitButton Register
+      p
+        a(href='/') Login

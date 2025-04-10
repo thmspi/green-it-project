@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.dashboard-wrapper {
+  position: relative;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logout-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: red;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.todo-panel {
+  width: 80%;
+  max-width: 800px;
+  margin-top: 5rem;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.top-bar .actions button {
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.todo-scroll-container {
+  max-height: 400px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.todo-item img {
+  margin-left: auto;
+  height: 50px;
+}
+
+.popup-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  z-index: 10;
+}
+
+.popup-form.hidden {
+  display: none;
+}

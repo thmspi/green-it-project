@@ -10,6 +10,12 @@ router.use((req, res, next) => {
   next();
 });
 
+router.post('/dashboard/delete-multiple', (req, res) => {
+  const ids = req.body.ids;
+  // Delete logic here
+  res.sendStatus(200);
+});
+
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
