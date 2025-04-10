@@ -2,18 +2,19 @@ doctype html
 html
   head
     title To-Do App
-    link(rel='stylesheet', href='/css/style.css')
     link(rel="stylesheet", href="/stylesheets/dashboard.css")
   body
     .dashboard-wrapper
     a.logout-button(href='/logout') Logout
 
-    .todo-panel
-      .top-bar
-        span.title Your To-Do Lists
-        .actions
-          button#delete-toggle 🗑️
-          button#create-toggle ＋
+    #container
+
+      .todo-panel
+        .top-bar
+          span.title Your To-Do Lists
+          .actions
+            button#delete-toggle 🗑️
+            button#create-toggle ＋
 
       .todo-scroll-container
         ul.todo-list
@@ -25,14 +26,20 @@ html
               if list.image
                 img(src=`/uploads/${list.image}`, alt='List Image', width='50')
 
-      // Popup form (initially hidden)
-      .popup-form.hidden
-        form(method='POST', action='/dashboard/create', enctype='multipart/form-data')
-          h2 Create New List
-          label(for='name') List Name:
-          input(type='text', name='name', required)
-          label(for='image') Optional Image:
-          input(type='file', name='image')
-          button(type='submit') Create
+        // Popup form (initially hidden)
+        .popup-form.hidden
+          form(method='POST', action='/dashboard/create', enctype='multipart/form-data')
+            h2 Create New List
+            .row
+              label(for='name') List Name:
+              input(type='text', name='name', required)
+            .row
+              label(for='image') Optional Image:
+              label.custom-file-button(for='image') Upload Image
+              input(type='file', name='image', id='image', class='real-file-input', hidden)
+              span.filename No file chosen
+
+            button(type='submit')#submitButton Create
+    script(src="/javascripts/dashboard.js")
 
   

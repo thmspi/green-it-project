@@ -1,6 +1,23 @@
+
+
+html {
+  font-family: "Source Code Pro", monospace;
+  background-color: var(--bg-color); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 30px;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 0;
+  font-family: sans-serif;
 }
 
 h1, h2 {
