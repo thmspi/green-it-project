@@ -4,6 +4,7 @@
   --grey3-color : rgb(46, 46, 46);
   --text-color : rgb(231, 231, 231);
   --main-color : rgb(202, 158, 0); /*rgba(247, 151, 29,)*/
+  --delete-color : #e21309;
 }
 
 html {
@@ -17,9 +18,31 @@ html {
   color : var(--text-color)
 }
 
+h1 {
+  margin : 0;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--main-color);
+}
+
+h2 {
+  margin : 30px 0 0 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
 #window-cont {
   background-color: var(--grey2-color);
   border-radius: 20px;
+  width : 50vw;
+}
+
+#add-item {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap : 15px;
 }
 
 #title-line {
@@ -36,18 +59,24 @@ html {
 }
 
 #fake-navbar {
-  height : 20px;
+  height : 40px;
   width : 100%;
+  flex-direction: row;
   display: flex;
-  align-items: start;
-  justify-content: start;
+  align-items: center;
+  justify-content: space-between;
+  gap : 30px;
   background-color: var(--grey3-color);
-  padding : 20px 0px;
+  padding : 10px 0px;
   border-radius: 20px 20px 0 0;
 }
 
 .mac-buttons {
+  align-items: center;
+  justify-content: center;
+  height : 100%;
   display: flex;
+  max-width: 67px;
   gap: 8px;
   padding-left: 15px;
 }
@@ -70,7 +99,7 @@ html {
 .red-button .cross {
   display: none;
   position: absolute;
-  color: white;
+  color: var(--bg-color);
   font-size: 10px;
   top: 50%;
   left: 50%;
@@ -87,4 +116,75 @@ html {
 
 .green-button {
   background-color: #27c93f;
+}
+
+#checkbox-done {
+  position:absolute;
+  width: 100%;
+  left : 0px;
+}
+
+.item {
+  margin : 5px 0;
+  display: flex;
+  align-items: start;
+  padding-left: 10px;
+  justify-content: space-between;
+}
+
+span {
+  font-size: 14px;
+}
+
+ul {
+  padding: 0 30px;
+  margin: 0;
+  max-height: 140px;
+  overflow-y: scroll;
+}
+
+input[type="text"]{
+  padding : 10px;
+  border-radius: 3px;
+  border: 1px solid var(--grey3-color);
+  background-color: var(--grey2-color);
+  margin : 0px 10px;
+  color : var(--text-color);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--main-color);
+}
+
+.item-name {
+  align-items: start;
+  justify-content: center;
+
+  position: relative;
+}
+
+#deleteButton, button[type='submit'] {
+  background-color: var(--grey2-color);
+  color: var(--text-color);
+  border: 1px solid var(--grey3-color);
+  transition: all 150ms ease-in;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+#add-button {
+  height : 38px;
+  padding: 0 10px;
+  transition: all 150ms ease-in;
+}
+
+#add-button:hover {
+  transform: scale(1.1);
+  background-color: var(--main-color);
+}
+
+#deleteButton:hover {
+
+  background-color: var(--delete-color);
 }

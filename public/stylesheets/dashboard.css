@@ -26,6 +26,10 @@ h1 {
   width : 40vw
 }
 
+.title {
+  margin-left: 20px;
+}
+
 .dashboard-wrapper {
   position: relative;
   padding: 2rem;
@@ -45,7 +49,7 @@ h1 {
 
 .todo-panel {
   min-width : 100%;
-  background-color: var(--grey2-color);
+  background-color: var(--main-color);
   width: 80%;
   max-width: 800px;
   border-radius: 5px;

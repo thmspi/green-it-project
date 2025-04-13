@@ -53,23 +53,6 @@ router.post('/:id/item/:itemId/toggle', async (req, res) => {
   }
 });
 
-// POST edit an item
-router.post('/:id/item/:itemId/edit', async (req, res) => {
-  const listId = req.params.id;
-  const itemId = req.params.itemId;
-  const { text } = req.body;
-  try {
-    const items = await itemModel.getItemsByList(listId);
-    const item = items.find(i => i.id == itemId);
-    if (!item) return res.send('Item not found.');
-    await itemModel.updateItem(itemId, text, item.done, listId);
-    res.redirect(`/list/${listId}`);
-  } catch (error) {
-    console.error(error);
-    res.send('Error editing item.');
-  }
-});
-
 // POST delete an item
 router.post('/:id/item/:itemId/delete', async (req, res) => {
   const listId = req.params.id;
