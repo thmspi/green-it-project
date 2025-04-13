@@ -1,8 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
+let multiSelectMode = false;
+
+window.addEventListener('DOMContentLoaded', () => {
+  const deleteToggleBtn = document.getElementById("delete-toggle");
+  const checkboxes = document.querySelectorAll(".multi-select");
   const createToggle = document.getElementById('create-toggle');
   const deleteToggle = document.getElementById('delete-toggle');
   const popupForm = document.querySelector('.popup-form');
-  let deleteMode = false;
 
   const fileInput = document.getElementById('image');
   const filenameSpan = document.querySelector('.filename');
@@ -26,49 +29,39 @@ if (fileInput) {
     });
   }
 
-  // Toggle multi-delete mode
-  deleteToggle.addEventListener('click', () => {
-    deleteMode = !deleteMode;
-    console.log("hey", deleteMode);
-    console.log("hey");
-    console.log(`🗑️ Delete mode: ${deleteMode ? 'ON' : 'OFF'}`);
-
-    const checkboxes = document.querySelectorAll('.multi-select');
-
-    checkboxes.forEach(cb => {
-      cb.style.visibility = deleteMode ? 'visible' : 'hidden';
-      cb.checked = false;
-    });
-
-    if (!deleteMode) {
-      const selected = Array.from(checkboxes)
+  deleteToggleBtn.addEventListener("click", () => {
+    if (!multiSelectMode) {
+      checkboxes.forEach(cb => cb.style.display = "inline-block");
+    } else {
+      const selectedIds = Array.from(checkboxes)
         .filter(cb => cb.checked)
-        .map(cb => cb.closest('.todo-item').dataset.id);
+        .map(cb => cb.closest("li").getAttribute("data-id"));
 
-      console.log("✅ Selected IDs:", selected);
-
-      if (selected.length > 0) {
-        fetch('/dashboard/delete-multiple', {
-          method: 'POST',
+      if (selectedIds.length > 0) {
+        fetch("/dashboard/delete", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify({ ids: selected })
+          body: JSON.stringify({ ids: selectedIds })
         })
-          .then(res => {
-            if (res.ok) {
-              console.log("💥 Delete request sent, reloading...");
-              window.location.reload();
-            } else {
-              console.error("❌ Server responded with error:", res.status);
-            }
-          })
-          .catch(err => {
-            console.error("❌ Fetch error:", err);
-          });
-      } else {
-        console.log("⚠️ No items selected for deletion.");
+        .then(async res => {
+          const contentType = res.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            return res.json();
+          } else {
+            const text = await res.text();
+            throw new Error("Expected JSON, got: " + text);
+          }
+        })
+        .then(data => {
+          console.log("Deleted:", data);
+          window.location.reload();
+        })
+        .catch(err => console.error("Delete failed:", err));
+        
       }
     }
+    multiSelectMode = !multiSelectMode;
   });
 });

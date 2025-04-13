@@ -4,17 +4,35 @@ const listModel = require('../models/list');
 const multer = require('multer');
 const path = require('path');
 
+const db = require('../models/db'); // ✅ Adjust path if needed
+
+
 // Middleware: Ensure user is logged in
 router.use((req, res, next) => {
   if (!req.session.userId) return res.redirect('/');
   next();
 });
 
-router.post('/dashboard/delete-multiple', (req, res) => {
-  const ids = req.body.ids;
-  // Delete logic here
-  res.sendStatus(200);
+router.post('/delete', async (req, res) => {
+  const { ids } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: 'Invalid or empty list of IDs' });
+  }
+
+  try {
+    const placeholders = ids.map(() => '?').join(', ');
+    const query = `DELETE FROM lists WHERE id IN (${placeholders})`;
+    await db.query(query, ids);
+
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting lists:", error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
+
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({

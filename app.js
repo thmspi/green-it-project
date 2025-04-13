@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Session configuration
 app.use(session({
-  secret: 'your-secret-key', // replace with a strong secret
+  secret: 'thisIsASecretThatShouldStaySecret', // replace with a strong secret
   resave: false,
   saveUninitialized: false
 }));
