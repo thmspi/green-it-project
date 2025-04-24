@@ -1,7 +1,51 @@
 doctype html
-html
+html(lang="fr")
   head
-    title To-Do App
-    link(rel='stylesheet', href='/css/style.css')
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title To-Do App | #{pageTitle || 'Votre espace'}
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet")
+    link(rel="stylesheet" href="/stylesheets/style.css")
+    link(rel="stylesheet" href="/stylesheets/dashboard.css")
+    link(rel="stylesheet" href="/stylesheets/to-do.css")
+    block styles
+
   body
-    block content
+    header.navbar
+      .container
+        a.nav-logo(href="/home") 📝 To-Do App
+        nav.nav-menu
+          ul
+            li: a.nav-item(href="/home") Accueil
+            li: a.nav-item(href="/dashboard") Mes Listes
+            li: a.nav-item(href="/profile") Profil
+            if session.userId
+              li: a.nav-item(href="/auth/logout") Déconnexion
+            else
+              li: a.nav-item(href="/auth/login") Login
+              li: a.nav-item(href="/auth/register") Register
+
+    #auth-modal.modal.hidden
+      .modal-content
+        button.modal-close(type="button", id="auth-modal-close") ×
+        h3#auth-modal-title Attention
+        p#auth-modal-message 
+        .modal-actions
+          a.btn-primary(href="/auth/login") Login
+          a.btn-secondary(href="/auth/register") Register
+
+    main.container
+      block content
+
+    footer.footer
+      .container
+        small © #{new Date().getFullYear()} To-Do App — Tous droits réservés
+
+    script.
+      window.isLoggedIn = #{session.userId ? 'true' : 'false'};
+
+    script(src="https://unpkg.com/axios/dist/axios.min.js")
+    script(src="/javascripts/main.js")
+    block scripts

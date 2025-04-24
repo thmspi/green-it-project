@@ -1,68 +1,77 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const listModel = require('../models/list');
-const itemModel = require('../models/item');
+const listModel = require("../models/list");
+const itemModel = require("../models/item");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-// Middleware: Ensure user is logged in
 router.use((req, res, next) => {
-  if (!req.session.userId) return res.redirect('/');
+  if (!req.session.userId) return res.redirect("/");
   next();
 });
 
-// GET single list view with items
-router.get('/:id', async (req, res) => {
+const itemsDir = path.join(__dirname, "../public/uploads/items");
+if (!fs.existsSync(itemsDir)) {
+  fs.mkdirSync(itemsDir, { recursive: true });
+}
+
+const uploadItem = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, itemsDir),
+    filename: (req, file, cb) =>
+      cb(null, Date.now() + path.extname(file.originalname)),
+  }),
+});
+
+router.get("/:id", async (req, res, next) => {
   const listId = req.params.id;
   try {
     const list = await listModel.getListById(listId, req.session.userId);
-    if (!list) return res.send('List not found.');
+    if (!list) return res.send("List not found.");
     const items = await itemModel.getItemsByList(listId);
-    res.render('list', { list, items });
-  } catch (error) {
-    console.error(error);
-    res.send('Error loading list.');
+    res.render("list", { list, items });
+  } catch (err) {
+    next(err);
   }
 });
 
-// POST add a new item to the list
-router.post('/:id/item', async (req, res) => {
+router.post("/:id/item", uploadItem.single("image"), async (req, res, next) => {
   const listId = req.params.id;
   const { text } = req.body;
+  const image = req.file ? req.file.filename : null;
+
   try {
-    await itemModel.createItem(text, listId);
+    await itemModel.createItem(text, image, listId);
     res.redirect(`/list/${listId}`);
   } catch (error) {
-    console.error(error);
-    res.send('Error adding item.');
+    console.error("Error adding item:", error);
+    res.status(500).send("Error adding item.");
   }
 });
 
-// POST toggle item done status
-router.post('/:id/item/:itemId/toggle', async (req, res) => {
+router.post("/:id/item/:itemId/toggle", async (req, res, next) => {
   const listId = req.params.id;
   const itemId = req.params.itemId;
   try {
     const items = await itemModel.getItemsByList(listId);
-    const item = items.find(i => i.id == itemId);
-    if (!item) return res.send('Item not found.');
-    const newStatus = !item.done;
-    await itemModel.updateItem(itemId, item.text, newStatus, listId);
+    const item = items.find((i) => i.id == itemId);
+    if (!item) return res.send("Item not found.");
+    await itemModel.updateItem(itemId, item.text, !item.done, listId);
     res.redirect(`/list/${listId}`);
-  } catch (error) {
-    console.error(error);
-    res.send('Error toggling item.');
+  } catch (err) {
+    next(err);
   }
 });
 
-// POST delete an item
-router.post('/:id/item/:itemId/delete', async (req, res) => {
+router.post("/:id/item/:itemId/delete", async (req, res, next) => {
   const listId = req.params.id;
   const itemId = req.params.itemId;
   try {
     await itemModel.deleteItem(itemId, listId);
     res.redirect(`/list/${listId}`);
-  } catch (error) {
-    console.error(error);
-    res.send('Error deleting item.');
+  } catch (err) {
+    next(err);
   }
 });
 

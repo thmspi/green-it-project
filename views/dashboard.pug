@@ -1,45 +1,52 @@
-doctype html
-html
-  head
-    title To-Do App
-    link(rel="stylesheet", href="/stylesheets/dashboard.css")
-  body
-    .dashboard-wrapper
-    a.logout-button(href='/logout') Logout
+extends layout
 
-    #container
+block styles
+  link(rel="stylesheet", href="/stylesheets/dashboard.css")
 
-      .todo-panel
-        .top-bar
-          span.title Your To-Do Lists
-          .actions
-            button#delete-toggle 🗑️
-            button#create-toggle ＋
+block content
+  .dashboard-header
+    h2.panel-title Vos listes de tâches
+    button#open-new-list.btn-create(type="button") ＋ Nouvelle liste
 
-      .todo-scroll-container
-        ul.todo-list
-          each list in lists
-            li.todo-item(data-id=list.id)
-              label.select-box
-                input(type="checkbox", class="multi-select", style="display: none")
-              a(href=`/list/${list.id}`)= list.name
-              if list.image
-                img(src=`/uploads/${list.image}`, alt='List Image', width='50')
+  .cards-container
+    each list in lists
+      .card-container
+        a.card(href=`/list/${list.id}`)
+          if list.image
+            .card-image
+              img(src=`/uploads/${list.image}`, alt=list.name)
+          .card-body
+            h3.card-title= list.name
+            - const total = list.total || 0
+            - const done  = list.doneCount || 0
+            if total > 0
+              - const percent = Math.round((done/total)*100)
+              .progress-container
+                .progress-bar-filled(style={width: percent + '%'})
+              span.progress-text #{percent}% complété
+            else
+              span.progress-text Aucune tâche
+        form.delete-form(
+          method="POST",
+          action=`/dashboard/${list.id}/delete`,
+          onsubmit="return confirm('Supprimer cette liste ?');"
+        )
+          button(type="submit", class="btn-delete") ×
 
-        // Popup form (initially hidden)
-        .popup-form.hidden
-          form(method='POST', action='/dashboard/create', enctype='multipart/form-data')
-            h2 Create New List
-            .row
-              label(for='name') List Name:
-              input(type='text', name='name', required)
-            .row
-              label(for='image') Optional Image:
-              label.custom-file-button(for='image') Upload Image
-              input(type='file', name='image', id='image', class='real-file-input', hidden)
-              span.filename No file chosen
+  .modal.hidden(id="new-list-modal")
+    .modal-overlay
+    .modal-content
+      button.modal-close(type="button", id="close-new-list") ×
+      h2 Créer une nouvelle liste
+      form(method="POST", action="/dashboard/create", enctype="multipart/form-data")
+        .form-group
+          label(for="name") Nom
+          input#name(type="text", name="name", required)
+        .form-group
+          label(for="image") Image (optionnelle)
+          input(type="file", name="image", accept="image/*")
+        .form-actions
+          button(type="submit") Créer
 
-            button(type='submit')#submitButton Create
-    script(src="/javascripts/dashboard.js")
-
-  
+block scripts
+  script(src="/javascripts/dashboard.js")

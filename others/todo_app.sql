@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS todo_app;
+USE todo_app;
+
+
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -147,6 +151,11 @@ ALTER TABLE `items`
 ALTER TABLE `lists`
   ADD CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
+
+ALTER TABLE items ADD COLUMN image VARCHAR(255) NULL;
+
+ALTER TABLE users
+ADD COLUMN profile_image VARCHAR(255) NULL AFTER password;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

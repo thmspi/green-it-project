@@ -1,58 +1,47 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userModel = require('../models/user');
-const bcrypt = require('bcrypt');
+const userModel = require("../models/user");
+const bcrypt = require("bcrypt");
 
-// GET login page
-router.get('/', (req, res) => {
-  res.render('login', { error: null });
+router.get("/login", (req, res) => {
+  res.render("login", { error: null });
 });
 
-// GET register page
-router.get('/register', (req, res) => {
-  res.render('register', { error: null });
-});
-
-// POST register
-router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const existingUser = await userModel.findUserByUsername(username);
-    if (existingUser) {
-      return res.render('register', { error: 'Username already exists.' });
-    }
-    await userModel.createUser(username, password);
-    res.redirect('/');
-  } catch (error) {
-    console.error(error);
-    res.render('register', { error: 'Registration failed.' });
-  }
-});
-
-// POST login
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await userModel.findUserByUsername(username);
-    if (!user) {
-      return res.render('login', { error: 'Invalid username or password.' });
-    }
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return res.render('login', { error: 'Invalid username or password.' });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.render("login", { error: "Invalid credentials." });
     }
     req.session.userId = user.id;
-    res.redirect('/dashboard');
-  } catch (error) {
-    console.error(error);
-    res.render('login', { error: 'Login failed.' });
+    req.session.username = user.username;
+    res.redirect("/dashboard");
+  } catch {
+    res.render("login", { error: "Login failed." });
   }
 });
 
-// GET logout
-router.get('/logout', (req, res) => {
+router.get("/register", (req, res) => {
+  res.render("register", { error: null });
+});
+
+router.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    if (await userModel.findUserByUsername(username)) {
+      return res.render("register", { error: "Username exists." });
+    }
+    await userModel.createUser(username, password);
+    res.redirect("/auth/login");
+  } catch {
+    res.render("register", { error: "Registration failed." });
+  }
+});
+
+router.get("/logout", (req, res) => {
   req.session.destroy();
-  res.redirect('/');
+  res.redirect("/auth/login");
 });
 
 module.exports = router;

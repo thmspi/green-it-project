@@ -1,0 +1,84 @@
+.home-intro {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.home-intro h2 {
+    color: var(--accent);
+}
+
+.home-intro p {
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.media-item {
+    background: var(--bg2);
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.media-item img,
+.media-item video {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.eco-paragraph {
+    max-width: 700px;
+    margin: 2rem auto;
+    line-height: 1.6;
+}
+
+.accordion-container {
+    max-width: 700px;
+    margin: 2rem auto;
+}
+
+.accordion-item {
+    border-bottom: 1px solid var(--bg);
+    margin-bottom: 0.5rem;
+}
+
+.accordion-toggle {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg2);
+    color: var(--fg);
+    text-align: left;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: background-color 0.2s;
+}
+
+.accordion-toggle:hover {
+    background: var(--bg);
+}
+
+.accordion-content {
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.accordion-content.hidden {
+    display: none;
+}
+
+.home-footer {
+    text-align: center;
+    margin: 3rem 0;
+}

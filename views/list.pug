@@ -1,31 +1,37 @@
-doctype html
-html
-  head
-    title To-Do App
-    link(rel='stylesheet', href='/stylesheets/to-do.css')
-  body
-    #window-cont
-      #fake-navbar
-        .mac-buttons
-          a.red-button(href='/dashboard')
-            span.cross ×
-          span.yellow-button
-          span.green-button
-        h1= list.name
-        if list.image
-        img(src=`/uploads/${list.image}`, alt='List Image', width='100')#list-image   
-      form(method='POST', action=`/list/${list.id}/item`)#add-item
-        input(type='text', name='text', required, placeholder='New item ...')
-        button(type='submit')#add-button Add 
-      #title-cont(style='display:flex; justify-content:center')
-        h2 ---------------- Items ----------------
-      ul
-        each item in items
-          li.item
-            .item-name
-              form(method='POST', action=`/list/${list.id}/item/${item.id}/toggle`, style='display:flex; height:22px')#checkbox-done
-                input(type='checkbox', onchange='this.form.submit()', checked=item.done, style="width: 100%; opacity:0")
-              span(style=item.done ? 'text-decoration: line-through;' : '')= item.text
-            form(method='POST', action=`/list/${list.id}/item/${item.id}/delete`, style='display:inline')
-              button(type='submit')#deleteButton Delete
-      
+extends layout
+
+block styles
+  link(rel="stylesheet", href="/stylesheets/to-do.css")
+
+block content
+  .list-banner
+    if list.image
+      img.list-cover(src=`/uploads/${list.image}`, alt=list.name)
+    h2.list-title= list.name
+
+  form#add-item(
+    method='POST'
+    action=`/list/${list.id}/item`
+    enctype='multipart/form-data'
+  )
+    input.text-input(type='text', name='text', required, placeholder='Nouvel item …')
+    input.file-input(type='file', name='image', accept='image/*')
+    button.btn-primary(type='submit') Ajouter
+
+  ul.item-list
+    each item in items
+      li.item
+        .item-main
+          form.toggle-form(method='POST', action=`/list/${list.id}/item/${item.id}/toggle`)
+            input.toggle-checkbox(
+              type='checkbox'
+              onchange='this.form.submit()'
+              checked=(item.done == 1)
+            )
+          span.item-text(
+            style=(item.done == 1 ? 'text-decoration: line-through; opacity: 0.6;' : '')
+          )= item.text
+          form.delete-form(method='POST', action=`/list/${list.id}/item/${item.id}/delete`)
+            button.delete-button(type='submit') ×
+        if item.image
+          img.item-image(src=`/uploads/items/${item.image}`, alt='Illustration')
