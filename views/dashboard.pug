@@ -1,7 +1,5 @@
 extends layout
 
-block styles
-  link(rel="stylesheet", href="/stylesheets/dashboard.css")
 
 block content
   .dashboard-header
@@ -10,7 +8,7 @@ block content
 
   .cards-container
     each list in lists
-      .card-container
+      .card-container(data-card-id=list.id)
         a.card(href=`/list/${list.id}`)
           if list.image
             .card-image
@@ -26,12 +24,9 @@ block content
               span.progress-text #{percent}% complété
             else
               span.progress-text Aucune tâche
-        form.delete-form(
-          method="POST",
-          action=`/dashboard/${list.id}/delete`,
-          onsubmit="return confirm('Supprimer cette liste ?');"
-        )
-          button(type="submit", class="btn-delete") ×
+        form.delete-form(method="POST", action=`/dashboard/${list.id}/delete`)
+           button(type="submit", class="btn-delete", data-list-name=list.name) ×
+
 
   .modal.hidden(id="new-list-modal")
     .modal-overlay
@@ -47,6 +42,18 @@ block content
           input(type="file", name="image", accept="image/*")
         .form-actions
           button(type="submit") Créer
+
+  //- Modale pour suppression d'une liste
+  #confirm-modal.hidden
+    .modal-overlay
+    .modal-content
+      button.modal-close(type="button", id="cancel-delete") ×
+      h2#confirm-title Supprimer cette liste ?
+      p#confirm-text Cette action est irréversible.
+      form(method="POST", id="confirm-form")
+        .form-actions
+          button(type="submit", class="btn-confirm") Oui, supprimer
+          button(type="button", id="cancel-button") Annuler
 
 block scripts
   script(src="/javascripts/dashboard.js")

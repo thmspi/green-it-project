@@ -7,12 +7,13 @@ html(lang="fr")
     link(rel="preconnect" href="https://fonts.googleapis.com")
     link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
     link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet")
-    link(rel="stylesheet" href="/stylesheets/style.css")
-    link(rel="stylesheet" href="/stylesheets/dashboard.css")
-    link(rel="stylesheet" href="/stylesheets/to-do.css")
-    block styles
+    link(rel="stylesheet", href="/stylesheets/floral.css")
 
   body
+    div#video-container
+      video#fondVideo(autoplay loop muted playsinline)
+        source(src="/videos/flower.mp4" type="video/mp4")
+
     header.navbar
       .container
         a.nav-logo(href="/home") 📝 To-Do App
@@ -37,7 +38,8 @@ html(lang="fr")
           a.btn-secondary(href="/auth/register") Register
 
     main.container
-      block content
+      .content-wrapper
+        block content
 
     footer.footer
       .container
@@ -45,7 +47,9 @@ html(lang="fr")
 
     script.
       window.isLoggedIn = #{session.userId ? 'true' : 'false'};
-
+    
     script(src="https://unpkg.com/axios/dist/axios.min.js")
     script(src="/javascripts/main.js")
+    script(src="/javascripts/flowerRain.js")
+
     block scripts
