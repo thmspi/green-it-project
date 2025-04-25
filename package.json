@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "devstart": "DEBUG=myapp:* nodemon node app.js"
+    "devstart": "DEBUG=green-it-project:* nodemon app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
